@@ -1,5 +1,6 @@
 package at.kalauner.dezsys06.transactionmanager.connection;
 
+import at.kalauner.dezsys06.transactionmanager.TwoPhaseCommitHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,6 +19,7 @@ public class SocketHandler extends Thread{
     private static final Logger LOGGER = LogManager.getLogger(SocketHandler.class);
     private ServerSocket serverSocket;
     private Set<ClientThread> clients;
+    TwoPhaseCommitHandler tpch;
 
     /**
      * Initializes the ServerSocket
@@ -67,5 +69,13 @@ public class SocketHandler extends Thread{
         for (ClientThread cur : clients) {
             cur.sendCommand(message);
         }
+    }
+
+    public void setTpch(TwoPhaseCommitHandler tpch) {
+        this.tpch = tpch;
+    }
+
+    public int getNumberOfClients() {
+        return this.clients.size();
     }
 }

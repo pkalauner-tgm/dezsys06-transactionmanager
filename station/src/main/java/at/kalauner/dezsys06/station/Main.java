@@ -19,8 +19,6 @@ public class Main {
     private static final Logger LOGGER = LogManager.getLogger(Main.class);
     private static final String DEFAULT_HOSTNAME = "127.0.0.1";
     private static final int DEFAULT_PORT = 12345;
-    private static DBConnectionCreator connection;
-    private static ClientSocket cs;
 
     /**
      * Main-Method
@@ -30,15 +28,12 @@ public class Main {
      */
     public static void main(String[] args) {
         LOGGER.info("Starting Station...");
-
         if (!parseArgs(args))
             System.exit(0);
-
-        DBMSConnection con = new DBMSConnection(connection.createConnection());
     }
 
     /**
-     * Parses the CLI arguments and creates DB-Connection
+     * Parses the CLI arguments and creates DB-Connection and ClientSocket
      *
      * @param args arguments
      * @return true if arguments are valid
@@ -53,7 +48,7 @@ public class Main {
 
             CommandLine cmd = parser.parse(options, args);
 
-            connection = new MySQLConnectionCreator();
+            DBConnectionCreator connection = new MySQLConnectionCreator();
 
             connection.setHost(cmd.getOptionValue("h"))
                     .setDatabase(cmd.getOptionValue("d"))
@@ -66,7 +61,8 @@ public class Main {
                 port = ((Number) cmd.getParsedOptionValue("port-tm")).intValue();
             }
 
-            cs = new ClientSocket(cmd.getOptionValue("host-tm", DEFAULT_HOSTNAME), port);
+            DBMSConnection con = new DBMSConnection(connection.createConnection());
+            ClientSocket cs = new ClientSocket(con, cmd.getOptionValue("host-tm", DEFAULT_HOSTNAME), port);
             return true;
 
         } catch (ParseException e) {

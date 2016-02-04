@@ -28,6 +28,7 @@ public class ClientThread extends Thread {
      */
     public ClientThread(SocketHandler sh, Socket socket) {
         LOGGER.info("New Client connected: " + socket.getInetAddress());
+        System.out.print("> ");
         this.sh = sh;
         this.socket = socket;
         this.initIO();
@@ -38,7 +39,7 @@ public class ClientThread extends Thread {
      * @param cmd the command which should be sent
      */
     public void sendCommand(String cmd) {
-        LOGGER.info("Sending command to " + socket.getInetAddress() + ": " + cmd);
+        LOGGER.debug("Sending command to " + socket.getInetAddress() + ": " + cmd);
         this.out.println(cmd);
     }
 
@@ -55,15 +56,6 @@ public class ClientThread extends Thread {
     }
 
     /**
-     * Handles a received command
-     *
-     * @param message the received command
-     */
-    private void handleCommand(String message) {
-
-    }
-
-    /**
      * Waits for commands
      */
     @Override
@@ -71,9 +63,7 @@ public class ClientThread extends Thread {
         try {
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
-                if (inputLine.equalsIgnoreCase("disconnect"))
-                    break;
-                this.handleCommand(inputLine);
+                sh.tpch.handleCommand(inputLine);
             }
             LOGGER.info("Client disconnected: " + socket.getInetAddress());
             this.sh.removeClient(this);
