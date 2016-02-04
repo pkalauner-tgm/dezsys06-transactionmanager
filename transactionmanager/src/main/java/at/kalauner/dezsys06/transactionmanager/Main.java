@@ -22,7 +22,6 @@ public class Main {
 
     /**
      * Main-Method <br>
-     * <p/>
      * Reads user inputs from the command line
      *
      * @param args CLI-arguments <br>

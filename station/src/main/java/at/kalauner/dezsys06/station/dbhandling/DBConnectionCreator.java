@@ -5,8 +5,9 @@ import java.sql.Connection;
 /**
  * Abstrakte Klasse mit Fabrikmethode zum Erstellen einer neuen Connection zu einer DB.<br>
  * Beinhaelt alle erforderlichen Daten, die zum Verbindungsaufbau erforderlich sind.
- * <p/>
+ * <p>
  * Hinweis: Diese Klasse wurde von einer frueheren SEW-Aufgabe vom 4. Jahrgang wiederverwendet.
+ * </p>
  *
  * @author Paul Kalauner, Ritter Mathias 4AHIT
  * @version 20141226.1

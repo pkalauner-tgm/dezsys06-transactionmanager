@@ -30,6 +30,7 @@ public class ClientSocket {
     /**
      * Initializes the ClientSocket
      *
+     * @param dbcon    DBConnection
      * @param hostname hostname of the server
      * @param port     port of the server
      */

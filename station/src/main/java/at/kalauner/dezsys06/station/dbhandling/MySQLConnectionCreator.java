@@ -10,8 +10,9 @@ import java.sql.SQLException;
 
 /**
  * Diese Klasse erweitert den DBConnectionCreator und implementiert die Fabrikmethode zum Erstellen einer Connection.
- * <p/>
+ * <p>
  * Hinweis: Diese Klasse wurde von einer frueheren SEW-Aufgabe vom 4. Jahrgang wiederverwendet.
+ * </p>
  *
  * @author Paul Kalauner, Ritter Mathias 4AHIT
  * @version 20141226.1
