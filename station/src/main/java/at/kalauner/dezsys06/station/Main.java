@@ -50,7 +50,7 @@ public class Main {
 
             DBConnectionCreator connection = new MySQLConnectionCreator();
 
-            connection.setHost(cmd.getOptionValue("h"))
+            connection.setHost(cmd.getOptionValue("host-dbms"))
                     .setDatabase(cmd.getOptionValue("d"))
                     .setUser(cmd.getOptionValue("u"))
                     .setPassword(cmd.getOptionValue("p"));
