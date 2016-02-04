@@ -50,6 +50,7 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("Enter a query, or '" + EXIT_COMMAND + "' to quit");
         try {
+            // Read user inputs
             while (true) {
 
                 System.out.print("> ");
@@ -61,9 +62,12 @@ public class Main {
                     LOGGER.info("Exiting");
                     System.exit(0);
                 }
+                // Check if at least one station is connected
                 if (sh.getNumberOfClients() > 0) {
                     tpch.startPrepare();
+                    // Thread.sleep to see what's going on
                     Thread.sleep(1000);
+                    // we send only one query, but a transaction could also contain multiple queries
                     tpch.sendQuery(input);
                     Thread.sleep(1000);
                     tpch.endPrepare();

@@ -71,6 +71,7 @@ public class TwoPhaseCommitHandler {
      * @param query query
      */
     public void sendQuery(String query) {
+        // Wait for all responses
         while (prepareAnswerCounter < sh.getNumberOfClients()) ;
         this.sh.broadcast("QUERY " + query);
     }
@@ -80,6 +81,7 @@ public class TwoPhaseCommitHandler {
      */
     public void endPrepare() {
         this.sh.broadcast("PREPARE_FINISHED");
+        // Wait for all responses
         while ((readyCounter + abortCounter + timeoutCounter) < sh.getNumberOfClients()) ;
         LOGGER.info(readyCounter + "xREADY " + abortCounter + "xABORT " + timeoutCounter + "xTIMEOUT");
         timeoutCounter = 0;
@@ -98,6 +100,7 @@ public class TwoPhaseCommitHandler {
             this.sh.broadcast("ROLLBACK");
         }
 
+        //Wait for all responses
         while ((ackCounter + nckCounter + timeoutCounter) < sh.getNumberOfClients()) ;
         LOGGER.info(ackCounter + "xACK " + nckCounter + "xNCK " + timeoutCounter + "xTIMEOUT");
         this.resetCounters();
