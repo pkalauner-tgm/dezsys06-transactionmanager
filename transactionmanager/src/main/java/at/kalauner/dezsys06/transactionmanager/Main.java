@@ -55,13 +55,12 @@ public class Main {
                 String input;
                 input = br.readLine();
 
-                sh.broadcast(input);
-
                 if (input.equalsIgnoreCase(EXIT_COMMAND)) {
                     System.out.println("Exiting");
                     LOGGER.info("Exiting");
                     System.exit(0);
                 }
+                sh.broadcast(input);
             }
         } catch (IOException e) {
             LOGGER.error("Error while reading user inputs");

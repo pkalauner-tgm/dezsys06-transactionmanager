@@ -53,6 +53,7 @@ public class ClientSocket {
      * @param command the received command
      */
     private void handleCommand(String command) {
+        LOGGER.info("Received command: " + command);
 
     }
 

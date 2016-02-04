@@ -36,6 +36,7 @@ public class ClientThread extends Thread {
      * @param cmd the command which should be sent
      */
     public void sendCommand(String cmd) {
+        LOGGER.info("Sending command to " + socket.getInetAddress() + ": " + cmd);
         this.out.println(cmd);
     }
 
