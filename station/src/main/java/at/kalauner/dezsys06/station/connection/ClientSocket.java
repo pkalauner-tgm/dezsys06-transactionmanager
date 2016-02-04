@@ -59,6 +59,7 @@ public class ClientSocket {
      * @param message the message which should be sent
      */
     public void sendMessage(String message) {
+        LOGGER.debug("Sending message to transcation manager: " + message);
         this.out.println(message);
     }
 

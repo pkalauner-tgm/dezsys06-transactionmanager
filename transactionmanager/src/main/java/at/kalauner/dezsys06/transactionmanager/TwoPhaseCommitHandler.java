@@ -15,12 +15,12 @@ public class TwoPhaseCommitHandler {
 
     private SocketHandler sh;
 
-    private int prepareAnswerCounter;
-    private int readyCounter;
-    private int abortCounter;
-    private int timeoutCounter;
-    private int ackCounter;
-    private int nckCounter;
+    private volatile int prepareAnswerCounter;
+    private volatile int readyCounter;
+    private volatile int abortCounter;
+    private volatile int timeoutCounter;
+    private volatile int ackCounter;
+    private volatile int nckCounter;
 
     public TwoPhaseCommitHandler(SocketHandler sh) {
         this.sh = sh;
@@ -64,7 +64,7 @@ public class TwoPhaseCommitHandler {
 
     public void endPrepare() {
         this.sh.broadcast("PREPARE_FINISHED");
-        while ((readyCounter+abortCounter+timeoutCounter) < sh.getNumberOfClients());
+        while ((readyCounter + abortCounter + timeoutCounter) < sh.getNumberOfClients());
         LOGGER.info(readyCounter + "xREADY " + abortCounter + "xABORT " + timeoutCounter + "xTIMEOUT");
         timeoutCounter = 0;
         commitPhase();
@@ -79,7 +79,7 @@ public class TwoPhaseCommitHandler {
             this.sh.broadcast("ROLLBACK");
         }
 
-        while ((ackCounter+nckCounter+timeoutCounter) < sh.getNumberOfClients());
+        while ((ackCounter + nckCounter + timeoutCounter) < sh.getNumberOfClients());
         LOGGER.info(ackCounter + "xACK " + nckCounter + "xNCK " + timeoutCounter + "xTIMEOUT");
         resetCounters();
     }
