@@ -17,6 +17,7 @@ import java.net.Socket;
  */
 public class ClientThread extends Thread {
     private static final Logger LOGGER = LogManager.getLogger(ClientThread.class);
+    private SocketHandler sh;
     private Socket socket;
     private PrintWriter out;
     private BufferedReader in;
@@ -25,8 +26,9 @@ public class ClientThread extends Thread {
      * Initializes the ClientThread with the given socket
      * @param socket socket
      */
-    public ClientThread(Socket socket) {
-        LOGGER.info("New Client connected");
+    public ClientThread(SocketHandler sh, Socket socket) {
+        LOGGER.info("New Client connected: " + socket.getInetAddress());
+        this.sh = sh;
         this.socket = socket;
         this.initIO();
     }
@@ -73,6 +75,8 @@ public class ClientThread extends Thread {
                     break;
                 this.handleCommand(inputLine);
             }
+            LOGGER.info("Client disconnected: " + socket.getInetAddress());
+            this.sh.removeClient(this);
             socket.close();
         } catch (Exception e) {
             e.printStackTrace();

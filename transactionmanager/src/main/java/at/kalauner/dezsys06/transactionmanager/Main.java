@@ -13,7 +13,7 @@ import java.io.InputStreamReader;
  * Main-Class
  *
  * @author Paul Kalauner 5BHIT
- * @version 1.0
+ * @version 20160204
  */
 public class Main {
     private static final Logger LOGGER = LogManager.getLogger(Main.class);

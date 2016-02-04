@@ -41,7 +41,7 @@ public class SocketHandler extends Thread{
     public void run() {
         try {
             while (true) {
-                ClientThread ct = new ClientThread(serverSocket.accept());
+                ClientThread ct = new ClientThread(this, serverSocket.accept());
                 clients.add(ct);
                 ct.start();
             }
@@ -51,12 +51,21 @@ public class SocketHandler extends Thread{
     }
 
     /**
+     * Removes a client from the Client Set
+     * @param ct the client which should be removed
+     */
+    public void removeClient(ClientThread ct) {
+        this.clients.remove(ct);
+    }
+
+    /**
      * Sends a message to all clients
      *
      * @param message the message which should be sent
      */
     public void broadcast(String message) {
-        for (ClientThread cur : clients)
+        for (ClientThread cur : clients) {
             cur.sendCommand(message);
+        }
     }
 }

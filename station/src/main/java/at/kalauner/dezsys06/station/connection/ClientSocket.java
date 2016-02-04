@@ -33,8 +33,10 @@ public class ClientSocket {
             this.socket = new Socket(hostname, port);
             this.out = new PrintWriter(this.socket.getOutputStream(), true);
             this.in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+            LOGGER.info("Connected to transaction manger on " + hostname + ":" + port);
+            this.startListening();
         } catch (IOException e) {
-            LOGGER.error("Error while connecting to server", e);
+            LOGGER.error("Error while connecting to transaction manager", e);
         }
     }
 
