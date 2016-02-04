@@ -53,7 +53,7 @@ public class ClientThread extends Thread {
             out = new PrintWriter(socket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("Error while initializing writer and reader " + e.getMessage());
         }
     }
 
@@ -67,12 +67,16 @@ public class ClientThread extends Thread {
             while ((inputLine = in.readLine()) != null) {
                 sh.tpch.handleCommand(inputLine);
             }
-            LOGGER.info("Client disconnected: " + socket.getInetAddress());
-            System.out.print("> ");
-            this.sh.removeClient(this);
-            socket.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error("Error " + e.getMessage());
+        }
+        LOGGER.info("Client disconnected: " + socket.getInetAddress());
+        System.out.print("> ");
+        this.sh.removeClient(this);
+        try {
+            socket.close();
+        } catch (IOException e) {
+            LOGGER.error("Error while closing socket " + e.getMessage());
         }
     }
 }
