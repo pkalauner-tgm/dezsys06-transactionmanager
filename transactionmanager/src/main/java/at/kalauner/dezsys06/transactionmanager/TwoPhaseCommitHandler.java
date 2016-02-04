@@ -22,6 +22,11 @@ public class TwoPhaseCommitHandler {
     private volatile int ackCounter;
     private volatile int nckCounter;
 
+    /**
+     * Initializes the TwoPhaseCommitHandler
+     *
+     * @param sh SocketHandler to send commands to clients
+     */
     public TwoPhaseCommitHandler(SocketHandler sh) {
         this.sh = sh;
         this.resetCounters();
@@ -53,23 +58,37 @@ public class TwoPhaseCommitHandler {
         }
     }
 
+    /**
+     * Starts the prepare phase
+     */
     public void startPrepare() {
         this.sh.broadcast("PREPARE");
     }
 
+    /**
+     * Sends a query during the prepare phase
+     *
+     * @param query query
+     */
     public void sendQuery(String query) {
-        while (prepareAnswerCounter < sh.getNumberOfClients());
+        while (prepareAnswerCounter < sh.getNumberOfClients()) ;
         this.sh.broadcast("QUERY " + query);
     }
 
+    /**
+     * Ends the prepare phase
+     */
     public void endPrepare() {
         this.sh.broadcast("PREPARE_FINISHED");
-        while ((readyCounter + abortCounter + timeoutCounter) < sh.getNumberOfClients());
+        while ((readyCounter + abortCounter + timeoutCounter) < sh.getNumberOfClients()) ;
         LOGGER.info(readyCounter + "xREADY " + abortCounter + "xABORT " + timeoutCounter + "xTIMEOUT");
         timeoutCounter = 0;
         commitPhase();
     }
 
+    /**
+     * Starts the commit Phase
+     */
     private void commitPhase() {
         if (readyCounter == sh.getNumberOfClients()) {
             LOGGER.info("doCommit");
@@ -79,13 +98,16 @@ public class TwoPhaseCommitHandler {
             this.sh.broadcast("ROLLBACK");
         }
 
-        while ((ackCounter + nckCounter + timeoutCounter) < sh.getNumberOfClients());
+        while ((ackCounter + nckCounter + timeoutCounter) < sh.getNumberOfClients()) ;
         LOGGER.info(ackCounter + "xACK " + nckCounter + "xNCK " + timeoutCounter + "xTIMEOUT");
-        resetCounters();
+        this.resetCounters();
     }
 
 
-    public void resetCounters() {
+    /**
+     * Resets the counters
+     */
+    private void resetCounters() {
         this.prepareAnswerCounter = 0;
         this.readyCounter = 0;
         this.abortCounter = 0;

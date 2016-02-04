@@ -24,6 +24,7 @@ public class ClientThread extends Thread {
 
     /**
      * Initializes the ClientThread with the given socket
+     *
      * @param socket socket
      */
     public ClientThread(SocketHandler sh, Socket socket) {
@@ -36,6 +37,7 @@ public class ClientThread extends Thread {
 
     /**
      * Sends a command to the client
+     *
      * @param cmd the command which should be sent
      */
     public void sendCommand(String cmd) {

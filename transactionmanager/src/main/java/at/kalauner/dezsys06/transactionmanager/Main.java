@@ -19,11 +19,10 @@ public class Main {
 
     private static final int DEFAULT_PORT = 12345;
     public static final String EXIT_COMMAND = "exit";
-    private static TwoPhaseCommitHandler tpch;
 
     /**
      * Main-Method <br>
-     *
+     * <p/>
      * Reads user inputs from the command line
      *
      * @param args CLI-arguments <br>
@@ -43,7 +42,7 @@ public class Main {
         }
 
         SocketHandler sh = new SocketHandler(port);
-        tpch = new TwoPhaseCommitHandler(sh);
+        TwoPhaseCommitHandler tpch = new TwoPhaseCommitHandler(sh);
         sh.setTpch(tpch);
         sh.start();
 

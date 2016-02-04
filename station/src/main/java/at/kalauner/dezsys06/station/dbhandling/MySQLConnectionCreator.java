@@ -9,8 +9,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 /**
- * Diese Klasse erweitert den DBConnectionCreator und implementiert die Fabrikmethode zum Erstellen einer Connection <br> <br>
- *
+ * Diese Klasse erweitert den DBConnectionCreator und implementiert die Fabrikmethode zum Erstellen einer Connection.
+ * <p/>
  * Hinweis: Diese Klasse wurde von einer frueheren SEW-Aufgabe vom 4. Jahrgang wiederverwendet.
  *
  * @author Paul Kalauner, Ritter Mathias 4AHIT

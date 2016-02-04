@@ -15,7 +15,7 @@ import java.util.Set;
  * @author Paul Kalauner 5BHIT
  * @version 20160204
  */
-public class SocketHandler extends Thread{
+public class SocketHandler extends Thread {
     private static final Logger LOGGER = LogManager.getLogger(SocketHandler.class);
     private ServerSocket serverSocket;
     private Set<ClientThread> clients;
@@ -54,6 +54,7 @@ public class SocketHandler extends Thread{
 
     /**
      * Removes a client from the Client Set
+     *
      * @param ct the client which should be removed
      */
     public void removeClient(ClientThread ct) {
@@ -71,10 +72,20 @@ public class SocketHandler extends Thread{
         }
     }
 
+    /**
+     * Setter for TwoPhaseCommitHandler
+     *
+     * @param tpch TwoPhaseCommitHandler
+     */
     public void setTpch(TwoPhaseCommitHandler tpch) {
         this.tpch = tpch;
     }
 
+    /**
+     * Gets the number of available clients
+     *
+     * @return number of clients
+     */
     public int getNumberOfClients() {
         return this.clients.size();
     }

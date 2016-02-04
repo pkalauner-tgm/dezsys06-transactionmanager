@@ -4,8 +4,8 @@ import java.sql.Connection;
 
 /**
  * Abstrakte Klasse mit Fabrikmethode zum Erstellen einer neuen Connection zu einer DB.<br>
- * Beinhaelt alle erforderlichen Daten, die zum Verbindungsaufbau erforderlich sind.<br><br>
- *
+ * Beinhaelt alle erforderlichen Daten, die zum Verbindungsaufbau erforderlich sind.
+ * <p/>
  * Hinweis: Diese Klasse wurde von einer frueheren SEW-Aufgabe vom 4. Jahrgang wiederverwendet.
  *
  * @author Paul Kalauner, Ritter Mathias 4AHIT
@@ -86,7 +86,7 @@ public abstract class DBConnectionCreator {
 
     /**
      * Setzen des Passworts.
-     * Wird nur gesetzt, wenn dieses nicht null ist-
+     * Wird nur gesetzt, wenn dieses nicht null ist.
      *
      * @param password Passwort
      * @return Das aktuelle Objekt (DBConnectionCreator)
@@ -96,6 +96,4 @@ public abstract class DBConnectionCreator {
             this.password = password;
         return this;
     }
-
-
 }
