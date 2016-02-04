@@ -85,7 +85,7 @@ public class Main {
 
         options.addOption(OptionBuilder
                 .hasArg(true)
-                .withDescription("Hostname of transaction manager. Standard: localhost")
+                .withDescription("Hostname of transaction manager. Default: localhost")
                 .withLongOpt("host-tm")
                 .create());
 
@@ -99,20 +99,20 @@ public class Main {
 
         options.addOption(OptionBuilder
                 .hasArg(true)
-                .withDescription("Hostname des DBMS. Standard: localhost")
+                .withDescription("Hostname of the DBMS. Default: localhost")
                 .withLongOpt("host-dbms")
                 .create());
 
 
         options.addOption(OptionBuilder
                 .hasArg(true)
-                .withDescription("Username. Default: root")
+                .withDescription("Username of the DBMS. Default: root")
                 .withLongOpt("user")
                 .create("u"));
 
         options.addOption(OptionBuilder
                 .hasArg(true)
-                .withDescription("Password. Default: none")
+                .withDescription("Password of the DBMS. Default: none")
                 .withLongOpt("password")
                 .create("p"));
 
