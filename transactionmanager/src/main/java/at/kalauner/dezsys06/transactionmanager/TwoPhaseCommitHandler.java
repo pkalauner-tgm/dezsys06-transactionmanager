@@ -32,7 +32,7 @@ public class TwoPhaseCommitHandler {
      *
      * @param cmd the received command
      */
-    public void handleCommand(String cmd) {
+    public synchronized void handleCommand(String cmd) {
         LOGGER.debug("Received command from client: " + cmd);
         switch (cmd) {
             case "GOT_PREPARE":

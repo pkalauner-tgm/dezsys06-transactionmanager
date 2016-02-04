@@ -66,6 +66,7 @@ public class ClientThread extends Thread {
                 sh.tpch.handleCommand(inputLine);
             }
             LOGGER.info("Client disconnected: " + socket.getInetAddress());
+            System.out.print("> ");
             this.sh.removeClient(this);
             socket.close();
         } catch (Exception e) {
