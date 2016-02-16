@@ -114,9 +114,9 @@ public class ClientSocket {
                 this.connect();
             }
         } catch (IOException e) {
-            LOGGER.error("Exception while listening to server", e);
+            LOGGER.error("Exception while listening to server");
         } catch (InterruptedException ie) {
-            LOGGER.error("Exception while Thread.sleep()", ie);
+            LOGGER.error("Exception while Thread.sleep()");
         }
     }
 }

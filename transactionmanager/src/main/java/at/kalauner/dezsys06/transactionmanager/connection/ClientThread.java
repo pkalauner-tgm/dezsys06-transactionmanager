@@ -26,6 +26,7 @@ public class ClientThread extends Thread {
      * Initializes the ClientThread with the given socket
      *
      * @param socket socket
+     * @param sh     SocketHandler
      */
     public ClientThread(SocketHandler sh, Socket socket) {
         LOGGER.info("New Client connected: " + socket.getInetAddress());

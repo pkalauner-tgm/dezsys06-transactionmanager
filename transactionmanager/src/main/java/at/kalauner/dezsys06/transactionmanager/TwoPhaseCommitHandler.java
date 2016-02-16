@@ -13,12 +13,14 @@ import org.apache.logging.log4j.Logger;
 public class TwoPhaseCommitHandler {
     private static final Logger LOGGER = LogManager.getLogger(TwoPhaseCommitHandler.class);
 
+    private int waited;
     private SocketHandler sh;
+
+    private static final int TIMEOUT_TIME = 60000;
 
     private volatile int prepareAnswerCounter;
     private volatile int readyCounter;
     private volatile int abortCounter;
-    private volatile int timeoutCounter;
     private volatile int ackCounter;
     private volatile int nckCounter;
 
@@ -28,6 +30,7 @@ public class TwoPhaseCommitHandler {
      * @param sh SocketHandler to send commands to clients
      */
     public TwoPhaseCommitHandler(SocketHandler sh) {
+        this.waited = 0;
         this.sh = sh;
         this.resetCounters();
     }
@@ -72,8 +75,22 @@ public class TwoPhaseCommitHandler {
      */
     public void sendQuery(String query) {
         // Wait for all responses
-        while (prepareAnswerCounter < sh.getNumberOfClients()) ;
-        this.sh.broadcast("QUERY " + query);
+        while (prepareAnswerCounter < sh.getNumberOfClients() && this.waited < TIMEOUT_TIME) {
+            try {
+                this.wait(100);
+            } catch (InterruptedException e) {
+                LOGGER.info("doRollback");
+                this.sh.broadcast("ROLLBACK");
+            }
+        }
+
+        if (this.waited >= TIMEOUT_TIME) {
+            LOGGER.info("No answer from all clients after 5 seconds. DoRollback");
+            this.sh.broadcast("ROLLBACK");
+        } else
+            this.sh.broadcast("QUERY " + query);
+
+        this.waited = 0;
     }
 
     /**
@@ -82,10 +99,17 @@ public class TwoPhaseCommitHandler {
     public void endPrepare() {
         this.sh.broadcast("PREPARE_FINISHED");
         // Wait for all responses
-        while ((readyCounter + abortCounter + timeoutCounter) < sh.getNumberOfClients()) ;
-        LOGGER.info(readyCounter + "xREADY " + abortCounter + "xABORT " + timeoutCounter + "xTIMEOUT");
-        timeoutCounter = 0;
-        commitPhase();
+        waitForAllReady();
+
+        if (this.waited >= TIMEOUT_TIME) {
+            LOGGER.info("No answer from all clients after 5 seconds. DoRollback");
+            this.sh.broadcast("ROLLBACK");
+        } else {
+            LOGGER.info(readyCounter + "xREADY " + abortCounter + "xABORT ");
+            commitPhase();
+        }
+
+        this.waited = 0;
     }
 
     /**
@@ -101,11 +125,44 @@ public class TwoPhaseCommitHandler {
         }
 
         //Wait for all responses
-        while ((ackCounter + nckCounter + timeoutCounter) < sh.getNumberOfClients()) ;
-        LOGGER.info(ackCounter + "xACK " + nckCounter + "xNCK " + timeoutCounter + "xTIMEOUT");
-        this.resetCounters();
+        waitForAllAck();
+
+        if (this.waited >= TIMEOUT_TIME) {
+            LOGGER.info("No answer from all clients after 5 seconds. DoRollback");
+            this.sh.broadcast("ROLLBACK");
+        } else {
+            LOGGER.info(ackCounter + "xACK " + nckCounter + "xNCK ");
+            this.resetCounters();
+        }
+        this.waited = 0;
     }
 
+    private void wait(int timeout) throws InterruptedException {
+        Thread.sleep(timeout);
+        this.waited += timeout;
+    }
+
+    private void waitForAllReady() {
+        while ((readyCounter + abortCounter) < sh.getNumberOfClients() && this.waited < TIMEOUT_TIME) {
+            try {
+                this.wait(100);
+            } catch (InterruptedException e) {
+                LOGGER.info("doRollback");
+                this.sh.broadcast("ROLLBACK");
+            }
+        }
+    }
+
+    private void waitForAllAck() {
+        while ((ackCounter + nckCounter) < sh.getNumberOfClients() && this.waited < TIMEOUT_TIME) {
+            try {
+                this.wait(100);
+            } catch (InterruptedException e) {
+                LOGGER.info("doRollback");
+                this.sh.broadcast("ROLLBACK");
+            }
+        }
+    }
 
     /**
      * Resets the counters
@@ -114,7 +171,6 @@ public class TwoPhaseCommitHandler {
         this.prepareAnswerCounter = 0;
         this.readyCounter = 0;
         this.abortCounter = 0;
-        this.timeoutCounter = 0;
         this.ackCounter = 0;
         this.nckCounter = 0;
     }
